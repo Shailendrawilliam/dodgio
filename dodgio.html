@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DODGIO — Awaken Bharat</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@300;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bhagwa: #FF6B00;
+  --bhagwa2: #FF4500;
+  --bhagwa3: #FFB347;
+  --gold: #FFD700;
+  --gold2: #FFA500;
+  --cyber-blue: #00D4FF;
+  --cyber-teal: #00FFD4;
+  --deep: #0A0500;
+  --deep2: #120A00;
+  --deep3: #1A0F00;
+  --panel: rgba(255,107,0,0.05);
+  --panel2: rgba(255,107,0,0.08);
+  --text: #F5E6CC;
+  --text2: #C4A882;
+  --glow: 0 0 20px rgba(255,107,0,0.6), 0 0 40px rgba(255,107,0,0.3);
+  --glow2: 0 0 20px rgba(0,212,255,0.5);
+  --glow-gold: 0 0 30px rgba(255,215,0,0.5);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--deep);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 20px; height: 20px;
+  border: 2px solid var(--bhagwa);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s, background 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-dot {
+  width: 4px; height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1;
+  opacity:0.4;
+}
+
+/* SCANLINES */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,107,0,0.015) 2px, rgba(255,107,0,0.015) 4px);
+  pointer-events:none;
+  z-index:2;
+}
+
+/* GRID BACKGROUND */
+.grid-bg {
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,107,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(10,5,0,0.95) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255,107,0,0.15);
+  backdrop-filter: blur(10px);
+}
+
+.logo-wrap {
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* SVG LOGO */
+.logo-svg {
+  width:52px; height:52px;
+  filter: drop-shadow(0 0 12px rgba(255,107,0,0.8));
+  animation: logoSpin 20s linear infinite;
+}
+
+@keyframes logoSpin {
+  0% { filter: drop-shadow(0 0 12px rgba(255,107,0,0.8)); }
+  50% { filter: drop-shadow(0 0 20px rgba(255,215,0,1)); }
+  100% { filter: drop-shadow(0 0 12px rgba(255,107,0,0.8)); }
+}
+
+.logo-text {
+  font-family: 'Orbitron', monospace;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--bhagwa), var(--gold), var(--bhagwa2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+.logo-sub {
+  font-size:9px;
+  letter-spacing:3px;
+  color: var(--text2);
+  font-family:'Rajdhani';
+  font-weight:300;
+}
+
+nav ul {
+  display:flex;
+  gap:32px;
+  list-style:none;
+}
+
+nav ul li a {
+  color: var(--text2);
+  text-decoration:none;
+  font-size:13px;
+  letter-spacing:2px;
+  font-weight:600;
+  text-transform:uppercase;
+  transition: all 0.3s;
+  position:relative;
+}
+
+nav ul li a::after {
+  content:'';
+  position:absolute;
+  bottom:-4px; left:0;
+  width:0; height:1px;
+  background: var(--bhagwa);
+  transition: width 0.3s;
+  box-shadow: var(--glow);
+}
+
+nav ul li a:hover { color: var(--bhagwa); }
+nav ul li a:hover::after { width:100%; }
+
+.nav-cta {
+  background: linear-gradient(135deg, var(--bhagwa), var(--bhagwa2));
+  color: white !important;
+  padding: 8px 20px;
+  border: none;
+  font-family:'Orbitron';
+  font-size:11px !important;
+  letter-spacing:2px;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: all 0.3s !important;
+}
+
+.nav-cta:hover {
+  box-shadow: var(--glow) !important;
+  transform: scale(1.05);
+}
+
+/* HERO */
+#hero {
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  z-index:3;
+}
+
+.hero-bg {
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,107,0,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,69,0,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0,212,255,0.03) 0%, transparent 50%);
+}
+
+/* ROTATING MANDALA */
+.mandala-wrap {
+  position:absolute;
+  width:700px; height:700px;
+  top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  opacity:0.08;
+}
+
+.mandala-ring {
+  position:absolute;
+  border-radius:50%;
+  border: 1px solid var(--bhagwa);
+}
+
+.ring1 { inset:0; animation: spinCW 40s linear infinite; }
+.ring2 { inset:60px; animation: spinCCW 30s linear infinite; border-color: var(--gold); }
+.ring3 { inset:120px; animation: spinCW 20s linear infinite; border-color: var(--bhagwa2); }
+.ring4 { inset:180px; animation: spinCCW 15s linear infinite; }
+.ring5 { inset:240px; animation: spinCW 10s linear infinite; border-color:var(--gold); }
+
+@keyframes spinCW { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes spinCCW { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+
+/* PARTICLE CANVAS */
+#particles { position:absolute; inset:0; z-index:1; }
+
+.hero-content {
+  position:relative;
+  z-index:10;
+  text-align:center;
+  padding:20px;
+}
+
+.hero-eyebrow {
+  font-family:'Orbitron';
+  font-size:11px;
+  letter-spacing:6px;
+  color: var(--cyber-teal);
+  margin-bottom:24px;
+  animation: fadeSlideUp 1s ease 0.2s both;
+  text-shadow: var(--glow2);
+}
+
+.hero-title {
+  font-family:'Orbitron';
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight:900;
+  line-height:0.9;
+  margin-bottom:16px;
+  animation: fadeSlideUp 1s ease 0.4s both;
+}
+
+.hero-title .line1 {
+  display:block;
+  background: linear-gradient(135deg, var(--bhagwa) 0%, var(--gold) 50%, var(--bhagwa2) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter: drop-shadow(0 0 30px rgba(255,107,0,0.5));
+}
+
+.hero-title .line2 {
+  display:block;
+  color:var(--text);
+  font-size:0.38em;
+  letter-spacing:12px;
+  -webkit-text-fill-color: var(--text2);
+  margin-top:8px;
+}
+
+.devanagari {
+  display:block;
+  font-family:'Noto Sans Devanagari';
+  font-size:0.28em;
+  letter-spacing:8px;
+  color: var(--bhagwa);
+  opacity:0.7;
+  margin-top:8px;
+  -webkit-text-fill-color: var(--bhagwa);
+}
+
+.hero-sub {
+  font-size:18px;
+  color:var(--text2);
+  letter-spacing:1px;
+  max-width:600px;
+  margin:0 auto 40px;
+  line-height:1.7;
+  animation: fadeSlideUp 1s ease 0.6s both;
+}
+
+.hero-sub span {
+  color: var(--bhagwa);
+  font-weight:700;
+}
+
+.hero-btns {
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+  animation: fadeSlideUp 1s ease 0.8s both;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--bhagwa), var(--bhagwa2));
+  color:white;
+  padding:14px 36px;
+  font-family:'Orbitron';
+  font-size:12px;
+  letter-spacing:3px;
+  border:none;
+  cursor:pointer;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  position:relative;
+  overflow:hidden;
+  transition: all 0.3s;
+  text-decoration:none;
+  display:inline-block;
+}
+
+.btn-primary::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--glow);
+  transform: translateY(-2px) scale(1.03);
+}
+.btn-primary:hover::before { transform: translateX(100%); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--bhagwa);
+  padding:13px 36px;
+  font-family:'Orbitron';
+  font-size:12px;
+  letter-spacing:3px;
+  border: 1px solid var(--bhagwa);
+  cursor:pointer;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  transition: all 0.3s;
+  text-decoration:none;
+  display:inline-block;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,107,0,0.1);
+  box-shadow: var(--glow);
+}
+
+/* STATS BAR */
+.stats-bar {
+  position:relative;
+  z-index:3;
+  background: linear-gradient(90deg, rgba(255,107,0,0.08), rgba(255,107,0,0.15), rgba(255,107,0,0.08));
+  border-top: 1px solid rgba(255,107,0,0.2);
+  border-bottom: 1px solid rgba(255,107,0,0.2);
+  padding:24px 40px;
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.stat-item {
+  text-align:center;
+  animation: fadeSlideUp 0.8s ease both;
+}
+
+.stat-num {
+  font-family:'Orbitron';
+  font-size:36px;
+  font-weight:900;
+  background: linear-gradient(135deg, var(--bhagwa), var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:block;
+}
+
+.stat-label {
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--text2);
+  text-transform:uppercase;
+}
+
+/* SECTIONS */
+section {
+  position:relative;
+  z-index:3;
+  padding:100px 40px;
+}
+
+.section-eyebrow {
+  font-family:'Orbitron';
+  font-size:10px;
+  letter-spacing:5px;
+  color: var(--cyber-teal);
+  margin-bottom:12px;
+  text-transform:uppercase;
+}
+
+.section-title {
+  font-family:'Orbitron';
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight:900;
+  line-height:1.1;
+  margin-bottom:20px;
+}
+
+.section-title .highlight {
+  background: linear-gradient(135deg, var(--bhagwa), var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.section-desc {
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  max-width:600px;
+}
+
+/* MISSION SECTION */
+#mission {
+  background: linear-gradient(180deg, var(--deep) 0%, var(--deep2) 50%, var(--deep) 100%);
+}
+
+.mission-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:60px;
+  align-items:center;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.mission-visual {
+  position:relative;
+  height:500px;
+}
+
+.chakra-container {
+  position:absolute;
+  width:400px; height:400px;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+
+.chakra-spoke {
+  position:absolute;
+  width:2px;
+  height:50%;
+  bottom:50%;
+  left:50%;
+  transform-origin:bottom center;
+  background: linear-gradient(0deg, var(--bhagwa), transparent);
+}
+
+.chakra-hub {
+  position:absolute;
+  width:60px; height:60px;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background: radial-gradient(circle, var(--gold), var(--bhagwa));
+  border-radius:50%;
+  box-shadow: var(--glow-gold);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%,100%{box-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,107,0,0.3);}
+  50%{box-shadow: 0 0 40px rgba(255,215,0,0.9), 0 0 80px rgba(255,107,0,0.6);}
+}
+
+.mission-text .section-desc {
+  max-width:100%;
+  margin-bottom:24px;
+}
+
+.quote-block {
+  border-left: 3px solid var(--bhagwa);
+  padding:16px 24px;
+  background: var(--panel);
+  margin:24px 0;
+  font-size:18px;
+  font-style:italic;
+  color:var(--text);
+  position:relative;
+}
+
+.quote-block::before {
+  content:'"';
+  font-size:60px;
+  color:var(--bhagwa);
+  opacity:0.3;
+  position:absolute;
+  top:-10px; left:10px;
+  font-family:Georgia;
+  line-height:1;
+}
+
+/* PILLARS */
+#pillars {
+  max-width:1200px;
+  margin:0 auto;
+  padding:100px 40px;
+}
+
+.pillars-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
+  gap:24px;
+  margin-top:60px;
+}
+
+.pillar-card {
+  background: var(--panel);
+  border: 1px solid rgba(255,107,0,0.15);
+  padding:36px;
+  position:relative;
+  overflow:hidden;
+  transition: all 0.4s;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.pillar-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(135deg, rgba(255,107,0,0.05) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity 0.4s;
+}
+
+.pillar-card:hover {
+  border-color: rgba(255,107,0,0.5);
+  transform:translateY(-6px);
+  box-shadow: 0 20px 60px rgba(255,107,0,0.15), inset 0 0 30px rgba(255,107,0,0.05);
+}
+
+.pillar-card:hover::before { opacity:1; }
+
+.pillar-icon {
+  font-size:40px;
+  margin-bottom:20px;
+  display:block;
+  filter: drop-shadow(0 0 10px rgba(255,107,0,0.6));
+  animation: iconFloat 3s ease infinite;
+}
+
+@keyframes iconFloat {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+.pillar-number {
+  position:absolute;
+  top:16px; right:20px;
+  font-family:'Orbitron';
+  font-size:60px;
+  font-weight:900;
+  color:rgba(255,107,0,0.06);
+  line-height:1;
+}
+
+.pillar-title {
+  font-family:'Orbitron';
+  font-size:16px;
+  font-weight:700;
+  color:var(--bhagwa);
+  margin-bottom:12px;
+  letter-spacing:2px;
+}
+
+.pillar-desc {
+  font-size:15px;
+  color:var(--text2);
+  line-height:1.7;
+}
+
+.pillar-tag {
+  display:inline-block;
+  margin-top:16px;
+  padding:4px 12px;
+  border:1px solid rgba(255,107,0,0.3);
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--bhagwa);
+  font-family:'Orbitron';
+}
+
+/* TIMELINE */
+#timeline {
+  background: var(--deep2);
+  padding:100px 40px;
+}
+
+.timeline-inner {
+  max-width:900px;
+  margin:60px auto 0;
+  position:relative;
+}
+
+.timeline-line {
+  position:absolute;
+  left:50%;
+  top:0; bottom:0;
+  width:2px;
+  background: linear-gradient(180deg, transparent, var(--bhagwa), var(--gold), var(--bhagwa), transparent);
+  transform:translateX(-50%);
+  box-shadow: 0 0 10px rgba(255,107,0,0.5);
+}
+
+.timeline-item {
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  gap:0;
+  margin-bottom:60px;
+  align-items:center;
+}
+
+.timeline-item:nth-child(even) .tl-content { grid-column:3; }
+.timeline-item:nth-child(even) .tl-empty { grid-column:1; }
+.timeline-item:nth-child(odd) .tl-content { grid-column:1; text-align:right; }
+.timeline-item:nth-child(odd) .tl-empty { grid-column:3; }
+
+.tl-dot {
+  grid-column:2;
+  width:20px; height:20px;
+  background: var(--bhagwa);
+  border-radius:50%;
+  margin:0 auto;
+  box-shadow: var(--glow);
+  position:relative;
+  z-index:2;
+  animation: pulse 2s ease infinite;
+}
+
+.tl-content {
+  background: var(--panel);
+  border:1px solid rgba(255,107,0,0.2);
+  padding:24px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.tl-era {
+  font-family:'Orbitron';
+  font-size:11px;
+  color:var(--cyber-teal);
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+.tl-title {
+  font-family:'Orbitron';
+  font-size:16px;
+  color:var(--bhagwa);
+  margin-bottom:8px;
+}
+
+.tl-desc {
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.6;
+}
+
+/* STRATEGY SECTION */
+#strategy {
+  max-width:1200px;
+  margin:0 auto;
+  padding:100px 40px;
+}
+
+.strategy-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:2px;
+  margin-top:60px;
+  background: rgba(255,107,0,0.1);
+}
+
+.strategy-cell {
+  background: var(--deep);
+  padding:40px 30px;
+  border:1px solid rgba(255,107,0,0.08);
+  transition:all 0.4s;
+  position:relative;
+  overflow:hidden;
+}
+
+.strategy-cell::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:2px;
+  background: linear-gradient(90deg, transparent, var(--bhagwa), transparent);
+  transform:scaleX(0);
+  transition:transform 0.4s;
+}
+
+.strategy-cell:hover {
+  background: var(--panel2);
+  transform:scale(1.02);
+  z-index:2;
+}
+
+.strategy-cell:hover::after { transform:scaleX(1); }
+
+.sc-num {
+  font-family:'Orbitron';
+  font-size:48px;
+  font-weight:900;
+  color:rgba(255,107,0,0.12);
+  margin-bottom:8px;
+}
+
+.sc-title {
+  font-family:'Orbitron';
+  font-size:14px;
+  color:var(--bhagwa);
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+.sc-desc {
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.7;
+}
+
+/* MANIFESTO */
+#manifesto {
+  background: linear-gradient(135deg, rgba(255,107,0,0.08) 0%, var(--deep) 40%, rgba(0,212,255,0.03) 100%);
+  padding:120px 40px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+#manifesto::before {
+  content:'ॐ';
+  position:absolute;
+  font-family:'Noto Sans Devanagari';
+  font-size:500px;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  color:rgba(255,107,0,0.02);
+  pointer-events:none;
+  line-height:1;
+}
+
+.manifesto-lines {
+  max-width:800px;
+  margin:60px auto 0;
+}
+
+.m-line {
+  font-family:'Orbitron';
+  font-size:clamp(20px, 3vw, 36px);
+  font-weight:900;
+  padding:20px 0;
+  border-bottom:1px solid rgba(255,107,0,0.1);
+  opacity:0;
+  transform:translateY(30px);
+  transition: all 0.8s ease;
+  position:relative;
+}
+
+.m-line.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+.m-line:nth-child(odd) { color:var(--text); }
+.m-line:nth-child(even) {
+  background: linear-gradient(135deg, var(--bhagwa), var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* JOIN SECTION */
+#join {
+  padding:100px 40px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.join-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:24px;
+  margin-top:60px;
+}
+
+.join-card {
+  border:1px solid rgba(255,107,0,0.2);
+  padding:40px 30px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  background: var(--panel);
+  transition:all 0.4s;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.join-card:hover {
+  border-color: var(--bhagwa);
+  box-shadow: var(--glow), inset 0 0 40px rgba(255,107,0,0.05);
+  transform:translateY(-8px);
+}
+
+.join-icon {
+  font-size:50px;
+  display:block;
+  margin-bottom:20px;
+  filter:drop-shadow(0 0 15px rgba(255,107,0,0.7));
+}
+
+.join-title {
+  font-family:'Orbitron';
+  font-size:16px;
+  color:var(--bhagwa);
+  margin-bottom:12px;
+  letter-spacing:2px;
+}
+
+.join-desc {
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+/* GLOBE SECTION */
+#globe-section {
+  background: var(--deep2);
+  padding:100px 40px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.globe-wrap {
+  position:relative;
+  width:500px;
+  height:500px;
+  margin:60px auto;
+}
+
+#globe-canvas {
+  width:100%;
+  height:100%;
+}
+
+/* CTA FINAL */
+#cta-final {
+  padding:120px 40px;
+  text-align:center;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,107,0,0.12) 0%, transparent 70%);
+  position:relative;
+  overflow:hidden;
+}
+
+.cta-title {
+  font-family:'Orbitron';
+  font-size:clamp(36px, 5vw, 72px);
+  font-weight:900;
+  line-height:1.1;
+  margin-bottom:24px;
+}
+
+.cta-title .big {
+  background: linear-gradient(135deg, var(--bhagwa), var(--gold), var(--bhagwa2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:block;
+  filter:drop-shadow(0 0 30px rgba(255,107,0,0.4));
+}
+
+.input-row {
+  display:flex;
+  gap:0;
+  max-width:500px;
+  margin:40px auto 0;
+}
+
+.email-input {
+  flex:1;
+  background: rgba(255,107,0,0.08);
+  border:1px solid rgba(255,107,0,0.3);
+  border-right:none;
+  padding:14px 20px;
+  color:var(--text);
+  font-family:'Rajdhani';
+  font-size:16px;
+  outline:none;
+  transition:border-color 0.3s;
+}
+
+.email-input:focus { border-color:var(--bhagwa); }
+.email-input::placeholder { color:var(--text2); opacity:0.6; }
+
+/* FOOTER */
+footer {
+  background: var(--deep2);
+  border-top:1px solid rgba(255,107,0,0.15);
+  padding:60px 40px 30px;
+  position:relative;
+  z-index:3;
+}
+
+.footer-grid {
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;
+  max-width:1200px;
+  margin:0 auto 40px;
+}
+
+.footer-brand .logo-text { font-size:22px; margin-bottom:12px; display:block; }
+
+.footer-desc {
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.footer-col h4 {
+  font-family:'Orbitron';
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--bhagwa);
+  margin-bottom:16px;
+  text-transform:uppercase;
+}
+
+.footer-col ul {
+  list-style:none;
+}
+
+.footer-col ul li {
+  margin-bottom:10px;
+}
+
+.footer-col ul li a {
+  color:var(--text2);
+  text-decoration:none;
+  font-size:14px;
+  transition:color 0.3s;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.footer-col ul li a::before {
+  content:'▸';
+  color:var(--bhagwa);
+  font-size:10px;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+
+.footer-col ul li a:hover { color:var(--bhagwa); }
+.footer-col ul li a:hover::before { opacity:1; }
+
+.footer-bottom {
+  border-top:1px solid rgba(255,107,0,0.1);
+  padding-top:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.footer-bottom p {
+  font-size:12px;
+  color:var(--text2);
+  letter-spacing:1px;
+}
+
+.footer-om {
+  font-family:'Noto Sans Devanagari';
+  font-size:24px;
+  color:var(--bhagwa);
+  filter:drop-shadow(0 0 10px rgba(255,107,0,0.6));
+}
+
+/* SCROLL ANIMATIONS */
+@keyframes fadeSlideUp {
+  from { opacity:0; transform:translateY(40px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.reveal {
+  opacity:0;
+  transform:translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* GLITCH TEXT */
+.glitch {
+  position:relative;
+}
+
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: transparent;
+}
+
+.glitch::before {
+  color:var(--cyber-blue);
+  animation: glitch1 4s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  -webkit-text-fill-color: var(--cyber-blue);
+}
+
+.glitch::after {
+  color:var(--bhagwa2);
+  animation: glitch2 4s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  -webkit-text-fill-color: var(--bhagwa2);
+}
+
+@keyframes glitch1 {
+  0%,90%,100%{transform:translate(0)} 
+  92%{transform:translate(-3px,1px)} 
+  94%{transform:translate(3px,-1px)}
+  96%{transform:translate(0)}
+}
+
+@keyframes glitch2 {
+  0%,90%,100%{transform:translate(0)} 
+  91%{transform:translate(3px,1px)} 
+  93%{transform:translate(-3px,-1px)}
+  95%{transform:translate(0)}
+}
+
+/* HORIZONTAL TICKER */
+.ticker-wrap {
+  background: rgba(255,107,0,0.08);
+  border-top:1px solid rgba(255,107,0,0.15);
+  border-bottom:1px solid rgba(255,107,0,0.15);
+  padding:12px 0;
+  overflow:hidden;
+  position:relative;
+  z-index:3;
+}
+
+.ticker {
+  display:flex;
+  white-space:nowrap;
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-item {
+  font-family:'Orbitron';
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--text2);
+  padding:0 40px;
+}
+
+.ticker-item span { color:var(--bhagwa); }
+
+@keyframes ticker {
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* FLOATING ELEMENTS */
+.float-symbol {
+  position:absolute;
+  font-family:'Noto Sans Devanagari';
+  color:rgba(255,107,0,0.06);
+  pointer-events:none;
+  animation: floatSym 10s ease infinite;
+  font-size:80px;
+}
+
+@keyframes floatSym {
+  0%,100%{transform:translateY(0) rotate(0deg); opacity:0.06;}
+  50%{transform:translateY(-30px) rotate(10deg); opacity:0.1;}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px) {
+  nav ul { display:none; }
+  .mission-grid { grid-template-columns:1fr; }
+  .strategy-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .timeline-item { grid-template-columns:1fr; }
+  .timeline-line { display:none; }
+  .tl-dot { display:none; }
+  .timeline-item:nth-child(even) .tl-content { grid-column:1; }
+  .timeline-item:nth-child(odd) .tl-content { grid-column:1; text-align:left; }
+}
+
+/* HEX BADGE */
+.hex-badge {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 16px;
+  background: rgba(255,107,0,0.1);
+  border:1px solid rgba(255,107,0,0.3);
+  font-family:'Orbitron';
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--bhagwa);
+  margin-bottom:20px;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.hex-badge::before { content:'◈'; }
+
+/* COUNTER ANIMATION */
+.counter { display:inline-block; }
+
+/* PROGRESS BARS */
+.prog-bar-wrap {
+  margin:12px 0;
+}
+
+.prog-label {
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--text2);
+  margin-bottom:6px;
+  font-family:'Orbitron';
+}
+
+.prog-track {
+  height:3px;
+  background: rgba(255,107,0,0.1);
+  position:relative;
+  overflow:hidden;
+}
+
+.prog-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--bhagwa2), var(--gold));
+  width:0%;
+  transition:width 1.5s ease;
+  box-shadow: 0 0 10px rgba(255,107,0,0.5);
+}
+
+.prog-fill.animated { width:var(--target-width); }
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="grid-bg"></div>
+
+<!-- FLOATING SYMBOLS -->
+<div class="float-symbol" style="top:20%;left:5%;animation-delay:0s">ॐ</div>
+<div class="float-symbol" style="top:60%;right:5%;animation-delay:3s;font-size:60px">स्वस्तिक</div>
+<div class="float-symbol" style="top:40%;left:2%;animation-delay:6s;font-size:50px">🔱</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="26" cy="26" r="24" stroke="#FF6B00" stroke-width="1.5" opacity="0.6"/>
+      <circle cx="26" cy="26" r="18" stroke="#FFD700" stroke-width="1" opacity="0.4"/>
+      <!-- Ashoka Chakra simplified -->
+      <circle cx="26" cy="26" r="8" fill="#FF6B00" opacity="0.9"/>
+      <circle cx="26" cy="26" r="4" fill="#FFD700"/>
+      <!-- Spokes -->
+      <line x1="26" y1="8" x2="26" y2="18" stroke="#FF6B00" stroke-width="1.5"/>
+      <line x1="26" y1="34" x2="26" y2="44" stroke="#FF6B00" stroke-width="1.5"/>
+      <line x1="8" y1="26" x2="18" y2="26" stroke="#FF6B00" stroke-width="1.5"/>
+      <line x1="34" y1="26" x2="44" y2="26" stroke="#FF6B00" stroke-width="1.5"/>
+      <line x1="12.7" y1="12.7" x2="19.8" y2="19.8" stroke="#FFD700" stroke-width="1"/>
+      <line x1="32.2" y1="32.2" x2="39.3" y2="39.3" stroke="#FFD700" stroke-width="1"/>
+      <line x1="39.3" y1="12.7" x2="32.2" y2="19.8" stroke="#FFD700" stroke-width="1"/>
+      <line x1="12.7" y1="39.3" x2="19.8" y2="32.2" stroke="#FFD700" stroke-width="1"/>
+      <!-- D letter stylized -->
+      <path d="M20 20 L20 32 L26 32 Q33 32 33 26 Q33 20 26 20 Z" fill="none" stroke="white" stroke-width="1.5" opacity="0.9"/>
+      <!-- Corner marks -->
+      <rect x="2" y="2" width="6" height="1.5" fill="#FF6B00" opacity="0.8"/>
+      <rect x="2" y="2" width="1.5" height="6" fill="#FF6B00" opacity="0.8"/>
+      <rect x="44" y="2" width="6" height="1.5" fill="#FF6B00" opacity="0.8"/>
+      <rect x="50.5" y="2" width="1.5" height="6" fill="#FF6B00" opacity="0.8"/>
+      <rect x="2" y="48.5" width="6" height="1.5" fill="#FF6B00" opacity="0.8"/>
+      <rect x="2" y="44" width="1.5" height="6" fill="#FF6B00" opacity="0.8"/>
+      <rect x="44" y="48.5" width="6" height="1.5" fill="#FF6B00" opacity="0.8"/>
+      <rect x="50.5" y="44" width="1.5" height="6" fill="#FF6B00" opacity="0.8"/>
+    </svg>
+    <div>
+      <div class="logo-text">DODGIO</div>
+      <div class="logo-sub">AWAKEN · RISE · LEAD</div>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#pillars">Pillars</a></li>
+    <li><a href="#timeline">History</a></li>
+    <li><a href="#strategy">Strategy</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><a href="#join" class="nav-cta">AWAKEN</a></li>
+  </ul>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="position:fixed;top:70px;z-index:99;">
+  <div class="ticker">
+    <span class="ticker-item">🔱 <span>BHARAT MATA KI JAI</span></span>
+    <span class="ticker-item">◈ <span>5000 YEARS OF UNBROKEN CIVILIZATION</span></span>
+    <span class="ticker-item">⬡ <span>THE WORLD IS YOUNG — BHARAT IS ETERNAL</span></span>
+    <span class="ticker-item">🔱 <span>REMEMBER WHO YOU ARE</span></span>
+    <span class="ticker-item">◈ <span>ROOTS ARE ROCKET FUEL</span></span>
+    <span class="ticker-item">⬡ <span>DIGITAL GURUKUL FOR THE 21ST CENTURY</span></span>
+    <span class="ticker-item">🔱 <span>BHARAT MATA KI JAI</span></span>
+    <span class="ticker-item">◈ <span>5000 YEARS OF UNBROKEN CIVILIZATION</span></span>
+    <span class="ticker-item">⬡ <span>THE WORLD IS YOUNG — BHARAT IS ETERNAL</span></span>
+    <span class="ticker-item">🔱 <span>REMEMBER WHO YOU ARE</span></span>
+    <span class="ticker-item">◈ <span>ROOTS ARE ROCKET FUEL</span></span>
+    <span class="ticker-item">⬡ <span>DIGITAL GURUKUL FOR THE 21ST CENTURY</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <canvas id="particles"></canvas>
+  <div class="mandala-wrap">
+    <div class="mandala-ring ring1"></div>
+    <div class="mandala-ring ring2"></div>
+    <div class="mandala-ring ring3"></div>
+    <div class="mandala-ring ring4"></div>
+    <div class="mandala-ring ring5"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">◈ CIVILIZATIONAL RENAISSANCE BEGINS ◈</div>
+    <h1 class="hero-title">
+      <span class="line1 glitch" data-text="DODGIO">DODGIO</span>
+      <span class="line2">AWAKEN BHARAT</span>
+      <span class="devanagari">जागो · उठो · नेतृत्व करो</span>
+    </h1>
+    <p class="hero-sub">
+      The world is shifting. <span>India is the axis.</span><br>
+      A movement for every Indian who knows their roots are their rocket fuel.
+      From Gen Z to Elder — <span>One civilization. One awakening.</span>
+    </p>
+    <div class="hero-btns">
+      <a href="#join" class="btn-primary">JOIN THE MOVEMENT</a>
+      <a href="#mission" class="btn-secondary">OUR MISSION</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <span class="stat-num counter" data-target="1400">0</span><span class="stat-num">M+</span>
+    <span class="stat-label">Indians Rising</span>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.1s">
+    <span class="stat-num counter" data-target="5000">0</span><span class="stat-num">+</span>
+    <span class="stat-label">Years of Civilization</span>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.2s">
+    <span class="stat-num counter" data-target="65">0</span><span class="stat-num">%</span>
+    <span class="stat-label">Youth Under 35</span>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.3s">
+    <span class="stat-num counter" data-target="32">0</span><span class="stat-num">M</span>
+    <span class="stat-label">Diaspora Worldwide</span>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.4s">
+    <span class="stat-num">∞</span>
+    <span class="stat-label">Potential Unlocked</span>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="mission-grid">
+    <div class="mission-visual">
+      <div class="chakra-container" id="chakraContainer">
+        <div class="chakra-hub"></div>
+      </div>
+    </div>
+    <div class="mission-text reveal">
+      <div class="hex-badge">MISSION DECODED</div>
+      <div class="section-eyebrow">WHY DODGIO EXISTS</div>
+      <h2 class="section-title">A <span class="highlight">Civilizational</span><br>Movement</h2>
+      <p class="section-desc">
+        DODGIO is not an NGO. It is not a charity. It is a <strong style="color:var(--bhagwa)">digital headquarters for civilizational renaissance</strong> — connecting Indian youth across the globe to their 5000-year inheritance.
+      </p>
+      <div class="quote-block">
+        "You cannot fight an ideology with laws or armies alone. You can only replace it with a stronger, more beautiful, more true one."
+      </div>
+      <p class="section-desc">
+        We bridge <strong style="color:var(--bhagwa)">ancient Indian wisdom + future technology</strong>. We give youth what no school ever taught them: <em>who they truly are</em>.
+      </p>
+      <div style="margin-top:32px">
+        <div class="prog-bar-wrap">
+          <div class="prog-label"><span>IDENTITY EMPOWERMENT</span><span>92%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--target-width:92%"></div></div>
+        </div>
+        <div class="prog-bar-wrap">
+          <div class="prog-label"><span>CIVILIZATIONAL AWARENESS</span><span>87%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--target-width:87%"></div></div>
+        </div>
+        <div class="prog-bar-wrap">
+          <div class="prog-label"><span>YOUTH OUTREACH</span><span>78%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--target-width:78%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars" style="padding:100px 40px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <div class="hex-badge">CORE ARCHITECTURE</div>
+      <div class="section-eyebrow">WHAT WE BUILD</div>
+      <h2 class="section-title">The 7 <span class="highlight">Pillars</span> of DODGIO</h2>
+    </div>
+    <div class="pillars-grid">
+
+      <div class="pillar-card reveal">
+        <span class="pillar-number">01</span>
+        <span class="pillar-icon">📚</span>
+        <div class="pillar-title">RECLAIM EDUCATION</div>
+        <p class="pillar-desc">Decolonize the mind. Chanakya, Chandragupta, Aryabhatta, Sushruta alongside modern science. A digital Gurukul that restores what Macaulay erased.</p>
+        <span class="pillar-tag">KNOWLEDGE</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.1s">
+        <span class="pillar-number">02</span>
+        <span class="pillar-icon">🕌</span>
+        <div class="pillar-title">REBUILD COMMUNITY</div>
+        <p class="pillar-desc">Physical + digital community infrastructure. What the mosque network does at ground level — DODGIO does for every Indian, everywhere.</p>
+        <span class="pillar-tag">COMMUNITY</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.2s">
+        <span class="pillar-number">03</span>
+        <span class="pillar-icon">📡</span>
+        <div class="pillar-title">NARRATIVE RECLAMATION</div>
+        <p class="pillar-desc">10,000 articulate young Indian voices. Marvel-level storytelling of Rama, Krishna, Shivaji. Win the algorithm with volume and truth.</p>
+        <span class="pillar-tag">MEDIA</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.3s">
+        <span class="pillar-number">04</span>
+        <span class="pillar-icon">💰</span>
+        <div class="pillar-title">ECONOMIC SOVEREIGNTY</div>
+        <p class="pillar-desc">Economic empowerment is identity protection. Skills, startups, microfinance — because poverty is the #1 conversion tool and we eliminate it.</p>
+        <span class="pillar-tag">ECONOMY</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.4s">
+        <span class="pillar-number">05</span>
+        <span class="pillar-icon">🔱</span>
+        <div class="pillar-title">SPIRITUAL RENAISSANCE</div>
+        <p class="pillar-desc">Yoga, meditation, Gita — not as ritual but as technology. Show that Sanatan Dharma solves modern anxiety better than any therapy app.</p>
+        <span class="pillar-tag">DHARMA</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.5s">
+        <span class="pillar-number">06</span>
+        <span class="pillar-icon">⚖️</span>
+        <div class="pillar-title">LEGAL AWARENESS</div>
+        <p class="pillar-desc">Constitutional rights, political literacy, advocacy. One law for all. Temple liberation. Indian voice at global forums — louder, clearer, unafraid.</p>
+        <span class="pillar-tag">JUSTICE</span>
+      </div>
+
+      <div class="pillar-card reveal" style="transition-delay:0.6s">
+        <span class="pillar-number">07</span>
+        <span class="pillar-icon">🌐</span>
+        <div class="pillar-title">GLOBAL INDIAN NETWORK</div>
+        <p class="pillar-desc">32 million diaspora. Coordinated. Strategic. The Jewish model — but Indian scale. Sundar, Satya, every Indian abroad — one civilizational agenda.</p>
+        <span class="pillar-tag">NETWORK</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div style="max-width:1200px;margin:0 auto;text-align:center">
+    <div class="hex-badge reveal">CIVILIZATIONAL MEMORY</div>
+    <div class="section-eyebrow reveal">THE EROSION WE MUST REVERSE</div>
+    <h2 class="section-title reveal">How <span class="highlight">4 Layers</span> of Erosion Happened</h2>
+  </div>
+  <div class="timeline-inner">
+    <div class="timeline-line"></div>
+
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-era">700 — 1700 AD</div>
+        <div class="tl-title">INVASION & DESTRUCTION</div>
+        <p class="tl-desc">Nalanda, Takshashila destroyed. Tens of thousands of temples razed. Forced conversions across the subcontinent. Physical civilization damaged.</p>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-empty"></div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="tl-empty"></div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-era">1757 — 1947 AD</div>
+        <div class="tl-title">COLONIAL MIND ERASURE</div>
+        <p class="tl-desc">Macaulay's minute 1835 — "Indian in blood, English in mind." Education system redesigned to produce self-doubt. Economic backbone broken. 45 trillion USD extracted.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-era">1947 — 2000 AD</div>
+        <div class="tl-title">MARXIST HISTORY CAPTURE</div>
+        <p class="tl-desc">NCERT textbooks rewritten. Pseudo-secularism institutionalized. 70 years of "majority = oppressor" narrative embedded in every educated Indian mind.</p>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-empty"></div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="tl-empty"></div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-era">2000 — NOW</div>
+        <div class="tl-title">DIGITAL IDENTITY DESTRUCTION</div>
+        <p class="tl-desc">Algorithm-driven cultural invasion. Bindi-tilak shamed in corporate India. "Rational atheism" targeting only Hindu practices. The vacuum is wide open.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="tl-content" style="border-color:rgba(255,215,0,0.4);background:rgba(255,215,0,0.05)">
+        <div class="tl-era" style="color:var(--gold)">NOW — FUTURE</div>
+        <div class="tl-title" style="color:var(--gold)">🔱 DODGIO — THE RENAISSANCE</div>
+        <p class="tl-desc">The counter begins. Not with anger. With identity, community, wisdom, technology and courage. A rooted tree cannot be uprooted.</p>
+      </div>
+      <div class="tl-dot" style="background:var(--gold);box-shadow:var(--glow-gold)"></div>
+      <div class="tl-empty"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGY -->
+<section id="strategy" style="padding:100px 40px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <div class="hex-badge">TACTICAL FRAMEWORK</div>
+      <div class="section-eyebrow">HOW WE WIN</div>
+      <h2 class="section-title">The <span class="highlight">8 Strategies</span><br>to Reach Every Mind</h2>
+    </div>
+    <div class="strategy-grid">
+      <div class="strategy-cell reveal">
+        <div class="sc-num">01</div>
+        <div class="sc-title">LET THEIR HEROES SAY IT</div>
+        <p class="sc-desc">Einstein, Tesla, Oppenheimer all validated Vedic wisdom. Use their framework to open the door. When their gods speak — they listen.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.1s">
+        <div class="sc-num">02</div>
+        <div class="sc-title">SCIENCE AS TROJAN HORSE</div>
+        <p class="sc-desc">Harvard studies on yoga. NASA on Sanskrit. WHO on Ayurveda. Same truth — modern packaging. They accept the package. Truth rewires them.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.2s">
+        <div class="sc-num">03</div>
+        <div class="sc-title">ECONOMIC PRIDE FIRST</div>
+        <p class="sc-desc">India was 25% of global GDP before colonization. Zero was invented here. Their tech career stands on Indian civilizational foundations.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.3s">
+        <div class="sc-num">04</div>
+        <div class="sc-title">MIRROR OF HYPOCRISY</div>
+        <p class="sc-desc">Never attack. Just ask. "Why apply critical standard to one but not the other?" Questions bypass defense mechanisms that statements trigger.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.4s">
+        <div class="sc-num">05</div>
+        <div class="sc-title">DEMONSTRATE DON'T DEBATE</div>
+        <p class="sc-desc">Build things that prove the point. Schools, startups, communities using Indic principles — outperforming Western models. Results convert the elite.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.5s">
+        <div class="sc-num">06</div>
+        <div class="sc-title">DIASPORA MIRROR</div>
+        <p class="sc-desc">Indians who maintained identity thrived most abroad. Second generation NOW searching for roots. They went to America to discover they should have stayed Indian.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.6s">
+        <div class="sc-num">07</div>
+        <div class="sc-title">DELINK FROM POLITICS</div>
+        <p class="sc-desc">Indus Valley is 5000 years old. No party is. Civilization conversation is possible only when political triggers are removed completely.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.7s">
+        <div class="sc-num">08</div>
+        <div class="sc-title">TARGET THE CHILDREN</div>
+        <p class="sc-desc">Some adults are too far gone. Their children are not. When a child comes home excited about Chandragupta — the parent listens through the child.</p>
+      </div>
+      <div class="strategy-cell reveal" style="transition-delay:0.8s;grid-column:1/-1;background:rgba(255,107,0,0.06)">
+        <div class="sc-num" style="color:rgba(255,215,0,0.15)">∞</div>
+        <div class="sc-title" style="color:var(--gold)">WIN THE MIDDLE — NOT THE CONVINCED OPPOSITION</div>
+        <p class="sc-desc" style="max-width:700px">The 60% who haven't decided. Who are searching quietly. Who feel something is missing. Who want roots but think it's uncool. Win the middle and the elite follows. Mass always precedes elite in cultural shifts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center">
+      <div class="hex-badge">THE DODGIO DECLARATION</div>
+      <div class="section-eyebrow">WHAT WE BELIEVE</div>
+      <h2 class="section-title">The <span class="highlight">Manifesto</span></h2>
+    </div>
+    <div class="manifesto-lines">
+      <div class="m-line">We are not a charity.</div>
+      <div class="m-line">We are a civilizational memory keeper.</div>
+      <div class="m-line">We do not fight anyone.</div>
+      <div class="m-line">We build something stronger, more beautiful, more true.</div>
+      <div class="m-line">Science tells you HOW.</div>
+      <div class="m-line">Civilization tells you WHY and FOR WHAT.</div>
+      <div class="m-line">You don't need to hate your roots to love technology.</div>
+      <div class="m-line">Your inheritance is 5000 years of unbroken genius.</div>
+      <div class="m-line">A rooted tree cannot be uprooted.</div>
+      <div class="m-line">Remember who you are. 🔱</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:20px">
+      <div class="hex-badge">ENTER THE MOVEMENT</div>
+      <div class="section-eyebrow">ALL AGE GROUPS WELCOME</div>
+      <h2 class="section-title">Every Indian.<br><span class="highlight">One Mission.</span></h2>
+      <p class="section-desc" style="margin:0 auto;text-align:center">From Gen Alpha to Grandparents — DODGIO connects every generation through the common thread of civilizational pride.</p>
+    </div>
+    <div class="join-grid">
+      <div class="join-card reveal">
+        <span class="join-icon">⚡</span>
+        <div class="join-title">GEN Z WARRIOR</div>
+        <p class="join-desc">Age 15-25. You were born into the identity war. You'll end it. Tech-native, culture-rooted, globally connected but Bharatiya at core.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px">JOIN NOW</a>
+      </div>
+      <div class="join-card reveal" style="transition-delay:0.1s">
+        <span class="join-icon">🚀</span>
+        <div class="join-title">MILLENNIAL BUILDER</div>
+        <p class="join-desc">Age 26-40. You are at peak power. Build the institutions DODGIO needs — companies, schools, media, communities that don't hate themselves.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px">BUILD WITH US</a>
+      </div>
+      <div class="join-card reveal" style="transition-delay:0.2s">
+        <span class="join-icon">🌿</span>
+        <div class="join-title">GEN X GUARDIAN</div>
+        <p class="join-desc">Age 41-55. You lived through the identity confusion. You know what was lost. Be the bridge. Your experience is DODGIO's foundation.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px">GUIDE US</a>
+      </div>
+      <div class="join-card reveal" style="transition-delay:0.3s">
+        <span class="join-icon">🪔</span>
+        <div class="join-title">ELDER WISDOM</div>
+        <p class="join-desc">Age 56+. You are the living memory of Bharat. Your stories, your knowledge, your lived dharma — is the most precious asset DODGIO has.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px">SHARE WISDOM</a>
+      </div>
+      <div class="join-card reveal" style="transition-delay:0.4s">
+        <span class="join-icon">🌐</span>
+        <div class="join-title">DIASPORA AMBASSADOR</div>
+        <p class="join-desc">Indian anywhere in the world. You carry Bharat in your DNA. Be the global voice. Coordinate. Influence. Represent the civilization that gave the world wisdom.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px">REPRESENT</a>
+      </div>
+      <div class="join-card reveal" style="transition-delay:0.5s;border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.03)">
+        <span class="join-icon">🔱</span>
+        <div class="join-title" style="color:var(--gold)">CHANGE SEEKER</div>
+        <p class="join-desc">Confused. Searching. Questioning. You don't have all the answers yet. Neither do we. But we search together — as Indians, for India, with India.</p>
+        <a href="#" class="btn-primary" style="font-size:10px;padding:10px 24px;background:linear-gradient(135deg,#FFD700,#FFA500)">START HERE</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <div class="reveal">
+    <div class="hex-badge" style="margin:0 auto 20px;display:inline-flex">BEGIN YOUR AWAKENING</div>
+    <h2 class="cta-title">
+      <span class="big">जागो भारत</span>
+      <span style="font-size:0.4em;letter-spacing:8px;color:var(--text2);display:block;margin-top:12px">THE RENAISSANCE STARTS WITH YOU</span>
+    </h2>
+    <p style="color:var(--text2);font-size:17px;letter-spacing:1px;max-width:500px;margin:0 auto 40px;line-height:1.7">
+      Join 10 million Indians waking up to who they truly are. Get weekly dispatches from the frontline of civilizational renaissance.
+    </p>
+    <div class="input-row">
+      <input type="email" class="email-input" placeholder="YOUR EMAIL — JOIN THE MOVEMENT">
+      <a href="#" class="btn-primary" style="clip-path:none;white-space:nowrap">AWAKEN 🔱</a>
+    </div>
+    <p style="color:var(--text2);font-size:11px;letter-spacing:2px;margin-top:16px;opacity:0.6">FREE · NO SPAM · PURE SIGNAL</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-wrap" style="margin-bottom:16px">
+        <svg width="36" height="36" viewBox="0 0 52 52" fill="none" style="filter:drop-shadow(0 0 8px rgba(255,107,0,0.6))">
+          <circle cx="26" cy="26" r="24" stroke="#FF6B00" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="26" cy="26" r="8" fill="#FF6B00" opacity="0.9"/>
+          <circle cx="26" cy="26" r="4" fill="#FFD700"/>
+          <line x1="26" y1="8" x2="26" y2="18" stroke="#FF6B00" stroke-width="1.5"/>
+          <line x1="26" y1="34" x2="26" y2="44" stroke="#FF6B00" stroke-width="1.5"/>
+          <line x1="8" y1="26" x2="18" y2="26" stroke="#FF6B00" stroke-width="1.5"/>
+          <line x1="34" y1="26" x2="44" y2="26" stroke="#FF6B00" stroke-width="1.5"/>
+        </svg>
+        <span class="logo-text" style="font-size:20px">DODGIO</span>
+      </div>
+      <p class="footer-desc">Digital headquarters of the Indian civilizational renaissance. Connecting 1.4 billion roots to the future they were always destined to build.</p>
+      <div style="display:flex;gap:12px">
+        <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:center;color:var(--text2);text-decoration:none;font-size:14px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--bhagwa)';this.style.color='var(--bhagwa)'" onmouseout="this.style.borderColor='rgba(255,107,0,0.3)';this.style.color='var(--text2)'">𝕏</a>
+        <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:center;color:var(--text2);text-decoration:none;font-size:14px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--bhagwa)';this.style.color='var(--bhagwa)'" onmouseout="this.style.borderColor='rgba(255,107,0,0.3)';this.style.color='var(--text2)'">in</a>
+        <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:center;color:var(--text2);text-decoration:none;font-size:16px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--bhagwa)';this.style.color='var(--bhagwa)'" onmouseout="this.style.borderColor='rgba(255,107,0,0.3)';this.style.color='var(--text2)'">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>MISSION</h4>
+      <ul>
+        <li><a href="#">Our Vision</a></li>
+        <li><a href="#">7 Pillars</a></li>
+        <li><a href="#">The Manifesto</a></li>
+        <li><a href="#">Who We Are</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>LEARN</h4>
+      <ul>
+        <li><a href="#">Digital Gurukul</a></li>
+        <li><a href="#">History Decoded</a></li>
+        <li><a href="#">Science & Dharma</a></li>
+        <li><a href="#">Chanakya Niti</a></li>
+        <li><a href="#">Modern Warriors</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>CONNECT</h4>
+      <ul>
+        <li><a href="#">Join Movement</a></li>
+        <li><a href="#">Volunteer</a></li>
+        <li><a href="#">Donate</a></li>
+        <li><a href="#">Diaspora Network</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 DODGIO — ALL RIGHTS RESERVED — BHARAT MATA KI JAI 🔱</p>
+    <div class="footer-om">ॐ</div>
+    <p style="font-family:'Orbitron';font-size:10px;letter-spacing:2px">REMEMBER WHO YOU ARE</p>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const dot = document.getElementById('cursorDot');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=(mx-2)+'px'; dot.style.top=(my-2)+'px'; });
+setInterval(()=>{ cx+=(mx-cx)*0.15; cy+=(my-cy)*0.15; cursor.style.left=(cx-10)+'px'; cursor.style.top=(cy-10)+'px'; },16);
+document.querySelectorAll('a,button,.pillar-card,.join-card,.strategy-cell').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cursor.style.transform='scale(2)'; cursor.style.background='rgba(255,107,0,0.2)'; });
+  el.addEventListener('mouseleave',()=>{ cursor.style.transform='scale(1)'; cursor.style.background=''; });
+});
+
+// PARTICLES
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize',()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
+
+const particles = [];
+for(let i=0;i<120;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    vx: (Math.random()-0.5)*0.4,
+    vy: (Math.random()-0.5)*0.4,
+    size: Math.random()*2+0.5,
+    opacity: Math.random()*0.6+0.1,
+    color: Math.random()>0.7 ? '#00D4FF' : '#FF6B00'
+  });
+}
+
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;
+    if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;
+    if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.opacity;
+    ctx.fill();
+  });
+  // Connect nearby
+  particles.forEach((a,i)=>{
+    particles.slice(i+1).forEach(b=>{
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<100){
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle='rgba(255,107,0,'+(0.08*(1-d/100))+')';
+        ctx.globalAlpha=1;
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      }
+    });
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// CHAKRA SPOKES
+const cc = document.getElementById('chakraContainer');
+if(cc){
+  for(let i=0;i<24;i++){
+    const s=document.createElement('div');
+    s.className='chakra-spoke';
+    s.style.transform=`rotate(${i*15}deg)`;
+    s.style.opacity='0.6';
+    cc.appendChild(s);
+  }
+  // Animate rotation
+  let angle=0;
+  setInterval(()=>{
+    angle+=0.3;
+    cc.style.transform=`translate(-50%,-50%) rotate(${angle}deg)`;
+  },16);
+}
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // Animate progress bars
+      e.target.querySelectorAll && e.target.querySelectorAll('.prog-fill').forEach(b=>b.classList.add('animated'));
+    }
+  });
+},{threshold:0.1});
+
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// MANIFESTO LINES
+const mObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.m-line').forEach((line,i)=>{
+        setTimeout(()=>line.classList.add('visible'),i*150);
+      });
+    }
+  });
+},{threshold:0.3});
+const mSection = document.getElementById('manifesto');
+if(mSection) mObserver.observe(mSection);
+
+// Also observe progress bars separately
+const pbObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.prog-fill').forEach(b=>b.classList.add('animated'));
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.mission-text').forEach(el=>pbObserver.observe(el));
+
+// COUNTER ANIMATION
+function animateCounter(el){
+  const target=parseInt(el.getAttribute('data-target'));
+  const duration=2000;
+  const step=target/duration*16;
+  let current=0;
+  const timer=setInterval(()=>{
+    current+=step;
+    if(current>=target){ el.textContent=target.toLocaleString(); clearInterval(timer); return; }
+    el.textContent=Math.floor(current).toLocaleString();
+  },16);
+}
+
+const cObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.counter').forEach(animateCounter);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('.stats-bar').forEach(el=>cObserver.observe(el));
+
+// GLITCH intervals
+setInterval(()=>{
+  document.querySelectorAll('.glitch').forEach(el=>{
+    el.style.animation='none';
+    setTimeout(()=>el.style.animation='',50);
+  });
+},5000);
+
+// NAV scroll effect
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('nav');
+  nav.style.background=window.scrollY>50?'rgba(10,5,0,0.98)':'linear-gradient(180deg,rgba(10,5,0,0.95) 0%,transparent 100%)';
+});
+
+</script>
+</body>
+</html>
